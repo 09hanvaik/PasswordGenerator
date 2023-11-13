@@ -96,6 +96,22 @@ function getPasswordOptions() {
     alert("Please select a password length between 8 and 128 characters.");
     return //Condition not met so restart funnction
   }
+
+  alert("Please select how many lower, upper, numerical and special characters you want. Please note: atleast one of these has to be more than zero! If the sum of the selection is greater than your password length, then you will get a randomly assorted password!")
+  
+  var passwordLower = prompt("How many lowercase characters do you want?", 0);
+  var passwordUpper = prompt("How many uppercase characters do you want?", 0);
+  var passwordNumeric = prompt("How many numerical characters do you want?", 0);
+  var passwordSpecial = prompt("How many special characters do you want?", 0)
+
+  if (passwordLower == 0 && passwordUpper == 0 && passwordNumeric == 0 && passwordSpecial == 0) {
+    alert("Atleast one of these has to be more than zero!");
+    return //Condition not met so restart funnction
+  }
+
+  return {
+    passwordLower, passwordSpecial, passwordNumeric, passwordUpper, passwordLength
+  }
 }
 
 // Function for getting a random element from an array
