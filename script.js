@@ -88,16 +88,19 @@ var upperCasedCharacters = [
   'Z'
 ];
 
+//Array to join all the above characters
+allCharacters = specialCharacters.concat(numericCharacters, lowerCasedCharacters, upperCasedCharacters)
+
 // Function to prompt user for password options
 function getPasswordOptions() {
   var passwordLength = prompt("Define password length");
 
   if (passwordLength < 8 || passwordLength > 128 || isNaN(passwordLength)){
     alert("Please select a password length between 8 and 128 characters.");
-    return //Condition not met so restart funnction
+    return getPasswordOptions() //Condition not met so restart funnction
   }
 
-  alert("Please select how many lower, upper, numerical and special characters you want. Please note: atleast one of these has to be more than zero! If the sum of the selection is greater than your password length, then you will get a randomly assorted password!")
+  alert("Please select how many lower, upper, numerical and special characters you want. Please note: atleast one of these has to be more than zero! If the sum of the following selections do not equal your password length, then you will get an assorted password that do not match your requirements exactly!")
   
   var passwordLower = prompt("How many lowercase characters do you want?", 0);
   var passwordUpper = prompt("How many uppercase characters do you want?", 0);
@@ -116,12 +119,52 @@ function getPasswordOptions() {
 
 // Function for getting a random element from an array
 function getRandom(arr) {
-
+  var n = Math.floor(Math.random() * arr.length);
+  return arr[n];
 }
 
 // Function to generate password with user input
 function generatePassword() {
+  var passwordCriteria = getPasswordOptions();
+  var passwordArray = [] //password array
 
+  //Add lower case charaters in password arrays
+  for (var i = 0; i < passwordCriteria.passwordLower; i++){
+    passwordArray.push(getRandom(lowerCasedCharacters))
+  }
+
+  //Add upper case charaters in password arrays
+  for (var i = 0; i < passwordCriteria.passwordUpper; i++){
+    passwordArray.push(getRandom(upperCasedCharacters))
+  }
+
+  //Add numeric charaters in password arrays
+  for (var i = 0; i < passwordCriteria.passwordNumeric; i++){
+    passwordArray.push(getRandom(numericCharacters))
+  }
+
+  //Add special case charaters in password arrays
+  for (var i = 0; i < passwordCriteria.passwordSpecial; i++){
+    passwordArray.push(getRandom(specialCharacters))
+  }
+
+  //randomise the password array
+  passwordArray.sort((a,b) => Math.random() - 0.5); 
+
+  //If the password array is bigger than the password length requirement then truncate till length requirement is met.
+  while (passwordArray.length > passwordCriteria.passwordLength){
+    passwordArray.pop()
+  }
+
+  //If the password array is smaller than the password length requirement then add random characters till length requirement is met.
+  while (passwordArray.length < passwordCriteria.passwordLength){
+    passwordArray.push(getRandom(allCharacters))
+  }
+  
+  password = passwordArray.join("")
+
+  return password;
+  
 }
 
 // Get references to the #generate element
